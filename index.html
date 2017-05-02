@@ -1,0 +1,57 @@
+<head>
+  <title>Cloropleth</title>
+
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body style="overflow: hidden">
+  <!-- Plotly chart will be drawn inside this DIV -->
+  <div id="myDiv" style="height: 100%; width: 100%"></div>
+  <script>
+    Plotly.d3.csv('https://query.data.world/s/8mxy0nhytnqbaraa9ann0gnm9', function(err, rows) {
+          function unpack(rows, key) {
+              return rows.map(function(row) {
+                return row[key];
+              });
+          }
+
+        var data = [{
+            type: 'choropleth',
+            locationmode: "country names",
+            locations: unpack(rows, 'country'),
+            z: unpack(rows, 'beer_servings'),
+            text: unpack(rows, 'spirit_servings'),
+            colorscale: [
+                [0,'rgb(5, 10, 172)'],[0.35,'rgb(40, 60, 190)'],
+                [0.5,'rgb(70, 100, 245)'], [0.6,'rgb(90, 120, 245)'],
+                [0.7,'rgb(106, 137, 247)'],[1,'rgb(220, 220, 220)']],
+            autocolorscale: false,
+            reversescale: true,
+            marker: {
+                line: {
+                    color: 'rgb(180,180,180)',
+                    width: 0.5
+                }
+            },
+            tick0: 0,
+            zmin: 0,
+            dtick: 1000,
+            colorbar: {
+              autotic: false,
+              tickprefix: '$',
+              title: 'Beer Servings by Country'
+            }
+            }];
+
+        var layout = {
+          title: 'Pure alcohol consumptionamong adults (age 15+) in 2010',
+          geo: {
+              projection: {
+                  type: 'robinson'
+              }
+          }
+        };
+        Plotly.plot(myDiv, data, layout, {showLink: false});
+    });
+  </script>
+</body>
