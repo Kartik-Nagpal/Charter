@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
   <head>
@@ -36,20 +35,6 @@
       $("#Selection").remove();
 
       Plotly.d3.csv(ltd, function(err, rows) {
-=======
-<head>
-    <title>Cloropleth</title>
-    <link rel="shortcut icon" type="image/png" href="./favicon.png"/>
-
-    <!-- Plotly.js -->
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-</head>
-<body style="overflow: hidden">
-    <!-- Plotly chart will be drawn inside this the #myDiv, becuase you pass that variable to it, right near the end -->
-    <div id="myDiv" style="height: 100%; width: 100%"></div>
-    <script>
-      Plotly.d3.csv('https://query.data.world/s/9igaz4qvvz4e6l8ipn27ibwbt', function(err, rows) {
->>>>>>> 2591ae54967fef1a2784006627c3c3797fe2cd09
             function unpack(rows, key) {
                 return rows.map(function(row) {
                   return row[key];
