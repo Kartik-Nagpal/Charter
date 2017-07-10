@@ -1,15 +1,40 @@
-<head>
-    <title>Cloropleth</title>
-    <link rel="shortcut icon" type="image/png" href="./favicon.png"/>
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Chart-Maker</title>
+      <link rel="shortcut icon" type="image/png" href="./favicon.png"/>
 
-    <!-- Plotly.js -->
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-</head>
-<body style="overflow: hidden">
-    <!-- Plotly chart will be drawn inside this the #myDiv, becuase you pass that variable to it, right near the end -->
-    <div id="myDiv" style="height: 100%; width: 100%"></div>
-    <script>
-      Plotly.d3.csv('https://query.data.world/s/2kpash6ec4n4m761ndgywaib', function(err, rows) {
+      <!-- CSS Resources -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous"></link>
+      <link rel="stylesheet" href="https://bootswatch.com/united/bootstrap.min.css" crossorigin="anonymous"></link>
+      <!-- End CSS Resources -->
+
+
+      <!-- Javascript Resources -->
+      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+      <script src="https://bootswatch.com/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+      <!-- End Javascript Resources -->
+
+  </head>
+
+  <script>
+
+    var app = angular.module("Charter", [])
+    app.controller("cont",
+    [
+
+    ]);
+
+
+    function create() {
+      var ltd = $("#URLdata").val();
+      console.log(ltd);
+
+      $("#Selection").remove();
+
+      Plotly.d3.csv(ltd, function(err, rows) {
             function unpack(rows, key) {
                 return rows.map(function(row) {
                   return row[key];
@@ -53,7 +78,115 @@
                 }
             }
           };
-          Plotly.plot(myDiv, data, layout, {displayModeBar: false}, {showLink: false});
+          Plotly.plot(chart, data, layout, {displayModeBar: false}, {showLink: false});
+          $("#holder").show();
       });
-    </script>
-</body>
+    }
+
+    function popup() {
+      $(".modal").show();
+    }
+
+    function cancel() {
+      $(".modal").hide();
+    }
+
+    function reset() {
+      console.log("CLEARED");
+    }
+  </script>
+
+
+
+  <body style="overflow: hidden">
+
+      <!-- Navbar Begins -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://kartik-nagpal.github.io/#">Data.World Chart-Maker</a>
+          </div>
+
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li><a href="https://kartik-nagpal.github.io/#">Portfolio<span class="sr-only">(current)</span></a></li>
+              <li><a href="https://kartik-nagpal.github.io/#Bubbles">Bubbles</a></li>
+              <li><a href="https://kartik-nagpal.github.io/#PlanetSim">PlanetSim</a></li>
+              <li><a href="https://kartik-nagpal.github.io/#ANN">Javascript ANN</a></li>
+            </ul>
+
+          </div>
+        </div>
+      </nav>
+      <!-- Navbar End -->
+
+      <div id="Selection" class="container">
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-10">
+
+            <div class="well">
+              <form class="form-horizontal">
+                <fieldset>
+                  <legend>Create a Chart</legend>
+                  <div class="form-group">
+                      <label class="control-label col-lg-2" for="DataURL">Insert Data URL</label>
+                    <div class="col-lg-10">
+                      <input class="form-control" id="URLdata" type="text" value="https://query.data.world/s/9igaz4qvvz4e6l8ipn27ibwbt"><!-- data.world/[url] -->
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                      <button type="reset" class="btn btn-default" onclick="popup()">Cancel</button>
+                      <button type="button" class="btn btn-primary" onclick="create()">Submit</button>
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+
+
+            <div class="modal">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="cancel()">&times;</button>
+                    <h4 class="modal-title">User Confirmation</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>ARE YOU SURE YOU WOULD LIKE TO CLEAR ALL FIELDS?</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="reset()" id="Yes">Yes, Delete</button>
+                    <button type="button" class="btn btn-success" onclick="cancel()" id="No" autofocus>No, Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+
+      </div>
+
+      <div class="container-fluid" style="height: 100%; width: 100%; margin: 0%;">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="well" id="holder" style="display: block; height: 100%; width: 100%; margin: 0%;">
+              <!-- Plotly chart will be drawn inside this the #chart, becuase you pass that variable to it, right near the end -->
+              <div id="chart" style="height: 100%; width: 100%; margin: 0%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </body>
+</html>
