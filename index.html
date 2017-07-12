@@ -11,104 +11,21 @@
 
 
       <!-- Javascript Resources -->
+      <script src="./PapaParse.js"></script>
       <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
       <script src="https://bootswatch.com/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+      <script src="./main.js"></script>
       <!-- End Javascript Resources -->
-
   </head>
 
-  <script>
 
-    var app = angular.module("Charter", [])
-
-    app.controller("cont", ["$scope", function($scope) {
-      $scope.show = false;
-
-      $scope.change = function() {
-        $scope.show = true;
-        console.log("here");
-      }
-
-    }]);
+  <script>onload();</script>
 
 
-    function create() {
-      var ltd = $("#URLdata").val();
-      console.log(ltd);
-
-
-      Plotly.d3.csv(ltd, function(err, rows) {
-            function unpack(rows, key) {
-                return rows.map(function(row) {
-                  return row[key];
-                });
-            }
-
-          var data = [{
-              type: 'choropleth',
-              locationmode: "country names",
-              locations: unpack(rows, 'country'),
-              z: unpack(rows, 'beer_servings'),
-              text: unpack(rows, 'spirit_servings'),
-              colorscale: [
-                  [0,'rgb(5, 10, 172)'],[0.35,'rgb(40, 60, 190)'],
-                  [0.5,'rgb(70, 100, 245)'], [0.6,'rgb(90, 120, 245)'],
-                  [0.7,'rgb(106, 137, 247)'],[1,'rgb(220, 220, 220)']],
-              autocolorscale: false,
-              reversescale: true,
-              marker: {
-                  line: {
-                      color: 'rgb(180,180,180)',
-                      width: 0.5
-                  }
-              },
-              tick0: 0,
-              zmin: 0,
-              dtick: 1000,
-              colorbar: {
-                autotic: false,
-                ticksuffix: ' Liters',
-                title: 'Beer Servings by Country'
-              }
-              }];
-
-          var layout = {
-            title: 'Alcohol Servings by Country',
-            showlegend: true,
-            geo: {
-                projection: {
-                    type: 'robinson'
-                }
-            }
-          };
-
-          $("#Selection").remove();
-          $("nav").hide();
-
-          Plotly.plot(chart, data, layout, {displayModeBar: false}, {showLink: false});
-      });
-    }
-
-    function popup() {
-      $(".modal").show();
-    }
-
-    function cancel() {
-      $(".modal").hide();
-    }
-
-    function reset() {
-      console.log("CLEARED");
-      window.location.reload();
-    }
-  </script>
-
-
-
-  <body ng-app="Charter" style="overflow: hidden"> <!-- style="overflow: hidden" -->
-    <div ng-controller="cont">
+  <body ng-app="Charter"> <!-- style="overflow: hidden" -->
+    <div ng-controller="controller as c" id="cont">
 
       <!-- Navbar Begins -->
       <nav class="navbar navbar-default">
@@ -120,7 +37,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="" onclick="window.location.reload()">Data.World Chart-Maker</a>
+            <a class="navbar-brand" href="" onclick="window.location.reload()">Chart-Maker</a>
           </div>
 
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -131,7 +48,12 @@
               <li><a href="https://kartik-nagpal.github.io/#ANN">Javascript ANN</a></li>
             </ul>
 
+            <div class="alert alert-dismissible alert-danger navbar-right" style="margin-bottom: 0px;">
+              <strong>Beware!</strong> These links lead away from this site, and you data will be deleted.</h3>
+            </div>
           </div>
+
+
         </div>
       </nav>
       <!-- Navbar End -->
@@ -176,22 +98,9 @@
 
                   </div>
 
-
-                  <!--<div class="form-group">
-                    <label for="select" class="col-lg-2 control-label">Data Type</label>
-                    <div class="col-lg-10">
-                      <select class="form-control" id="select">
-                        <option>CSV File</option>
-                        <option>Excel File</option>
-                        <option disabled>More Coming Soon</option>
-                      </select>
-                    </div>
-                  </div>-->
-
-
                   <div class="form-group">
                     <label for="select" class="col-lg-2 control-label">Chart Type</label>
-                    <div class="col-lg-6">
+                    <div class="col-lg-5">
                       <select class="form-control" id="select">
                         <option>Line Plot</option>
                         <option>Bubble Chart</option>
@@ -211,10 +120,10 @@
                       </select>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox"> Include Legend
+                          <input type="checkbox" onclick="$('.LegendData').toggle(!this.checked)"> Don't Include Legend
                         </label>
                       </div>
                     </div>
@@ -230,44 +139,78 @@
                         <div class="form-group">
                           <label for="ChartTitle" class="col-lg-2 control-label">Chart Title</label>
                           <div class="col-lg-10">
-                            <input type="text" class="form-control" id="ChartTitle" placeholder="Alcohol Servings by Country">
+                            <input type="text" class="form-control" id="ChartTitle" value="Alcohol Servings by Country">
                           </div>
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="form-group">
-                          <label for="LegendTitle" class="col-lg-2 control-label">Legend Title</label>
-                          <div class="col-lg-10">
-                            <input type="text" class="form-control" id="LegendTitle" placeholder="Beer Servings by Country">
+                      <div class="LegendData">
+                        <div class="row">
+                          <div class="form-group">
+                            <label for="LegendTitle" class="col-lg-2 control-label">Legend Title</label>
+                            <div class="col-lg-10">
+                              <input type="text" class="form-control" id="LegendTitle" value="Beer Servings by Country">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="form-group">
+                            <label for="Units" class="col-lg-2 control-label">Legend Units</label>
+                            <div class="col-lg-10">
+                              <input type="text" class="form-control" id="Units" value="Liters">
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="form-group">
-                          <label for="Units" class="col-lg-2 control-label">Legend Units</label>
-                          <div class="col-lg-10">
-                            <input type="text" class="form-control" id="Units" placeholder="Liters">
-                          </div>
-                        </div>
-                      </div>
+
                     </div>
                   </div>
 
                   <div class="panel panel-success">
+
                     <div class="panel-heading">
-                      <h3 class="panel-title">Column Choose</h3>
+                      <h3 class="panel-title">Choosing Axis and Data</h3>
                     </div>
                     <div class="panel-body">
-
+                      <div class="row">
+                        <div class="col-md-7">
+                          <div class="form-group">
+                            <label class="col-lg-5 control-label">Data Orientation</label>
+                            <div class="col-lg-7">
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" name="optionsRadios" id="Columns" onclick="parse(1)" value="option1">
+                                  Columns
+                                </label>
+                              </div>
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" name="optionsRadios" id="Rows" onclick="parse(2)" value="option2">
+                                  Rows
+                                </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+
+                    <br><br>
+                    <div class="row">
+                      <div class="well col-md-10 col-md-offset-1" id="options" ng-show="show.isON">
+                        {{c.product}}
+                      </div>
+                    </div>
+
+
                   </div>
+
+                </div>
 
 
 
 
 
                   <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-2">
+                    <div class="col-lg-3 col-lg-offset-9 pull right">
                       <button type="button" class="btn btn-default" onclick="popup()">Cancel</button>
                       <button type="button" class="btn btn-primary" onclick="create()">Submit</button>
                     </div>
@@ -317,9 +260,14 @@
       </div>-->
 
 
-      <div class="well" style="min-height: calc(100vh - 80px);">
-        <!-- Plotly chart will be drawn inside this the #chart, becuase you pass that variable to it, right near the end -->
-        <div id="chart" style="min-height: calc(100vh - 80px);"></div>
+      <div class="well" style="min-height: calc(100vh - 80px); overflow: hidden;">
+        <div class="row">
+          <!-- Plotly chart will be drawn inside this the #chart, becuase you pass that variable to it, right near the end -->
+          <div id="chart" style="min-height: calc(100vh - 80px);"></div>
+        </div>
+        <div class="row">
+          <a href="#" class="btn btn-primary pull-right" onclick="export()">Export as PNG</a>
+        </div>
       </div>
 
     </div>

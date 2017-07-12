@@ -1,22 +1,68 @@
-var app = angular.module("Charter", [])
 
-app.controller("cont", ["$scope", function($scope) {
-  $scope.show = false;
+function onload()
+{
+  var app = angular.module("Charter", []);
+  console.log("Running");
 
-  $scope.change = function() {
-    $scope.show = true;
-    console.log("here");
-  }
 
-}]);
+  app.controller("controller", ["$scope", function($scope) {
+
+    $scope.f = "pls work";
+
+    $scope.show = {
+      name: "Show Boolean: ",
+      isON: false,
+    };
+
+    $scope.update = function(t) {
+      console.log("Works");
+      this.product = t;
+
+      $scope.$apply(function () {
+          $scope.show.isON = true;
+      });
+    }
+    //this.product = show;
+
+    /*$scope.parse = function(n) {
+      var d;
+      if(n === 1) {
+        Papa.parse($("#URLdata").val(), {
+        	download: true,
+        	complete: function(results) {
+        		d = results;
+        	}
+        });
+
+        setTimeout(function () {
+            var x = d.data[0];
+            console.log(x);
+            var t = document.createElement("table");
+            var row = t.appendChild(document.createElement('tr'));
+            for (var i = 0; i < x.length; i++) {
+                var cell = row.appendChild(document.createElement('td'));
+                cell.id = x[i];
+                cell.click(function() {
+                  console.log(this.id);
+                })
+            }
+
+            $("#options").append(t);
+            $scope.show.isON = true;
+            console.log("What??");
+        }, 2000);
+      }
+      else {
+        console.log("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+      }
+    };*/
+  }]);
+}
 
 
 function create() {
-  var ltd = $("#URLdata").val();
-  console.log(ltd);
 
-
-  Plotly.d3.csv(ltd, function(err, rows) {
+    Plotly.d3.csv($("#URLdata").val(), function(err, rows) {
         function unpack(rows, key) {
             return rows.map(function(row) {
               return row[key];
@@ -46,13 +92,13 @@ function create() {
           dtick: 1000,
           colorbar: {
             autotic: false,
-            ticksuffix: ' Liters',
-            title: 'Beer Servings by Country'
+            ticksuffix: ' ' + $("#Units").val(),
+            title: $("#LegendTitle").val()
           }
           }];
 
       var layout = {
-        title: 'Alcohol Servings by Country',
+        title: $("#ChartTitle").val(),
         showlegend: true,
         geo: {
             projection: {
@@ -66,6 +112,68 @@ function create() {
 
       Plotly.plot(chart, data, layout, {displayModeBar: false}, {showLink: false});
   });
+}
+
+
+function parse(n) {
+  var d;
+  if(n === 1) {
+    Papa.parse($("#URLdata").val(), {
+    	download: true,
+    	complete: function(results) {
+    		d = results;
+    	}
+    });
+
+    setTimeout(function () {
+        var x = d.data[0];
+        console.log(x);
+
+        var d1 = $("<div></div>").addClass("form-group");
+        var label = $("<label></label>").addClass("col-lg-2 control-label").html("X-Axis");
+        var d2 = $("<div></div>").addClass("col-lg-10");
+        var d3 = $("<div></div>").addClass("form-group");
+        var label2 = $("<label></label>").addClass("col-lg-2 control-label").html("Y-Axis");
+        var d4 = $("<div></div>").addClass("col-lg-10");
+        var selectX = $("<select></select>").addClass("form-control");
+        var selectY = $("<select></select>").addClass("form-control");
+
+
+        var t = $("<table></table>").addClass("table table-striped table-hover");
+        var row = $("<tr></tr>").addClass("active");
+        for (var i = 0; i < x.length; i++) {
+            var cell = $("<th></th>").text(x[i]);
+            row.append(cell);
+
+            var option = $("<option></option>").html(x[i]);
+            var option2 = $("<option></option>").html(x[i]);
+            selectX.append(option);
+            selectY.append(option2);
+        }
+        t.append(row);
+
+        d1.append(label);
+        d2.append(selectX);
+        d3.append(label2);
+        d4.append(selectY);
+        d1.append(d2);
+        d3.append(d4);
+
+        var r = $("<div></div>").addClass("row");
+        r.append(d1);
+        r.append(d3);
+
+        $("#options").append($(t));
+        $("#options").append(r);
+
+        angular.element($('#cont')).scope().update(t);
+        angular.element($('#cont')).scope().$apply();
+        console.log("Done");
+    }, 500);
+  }
+  else {
+    console.log("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+  }
 }
 
 function popup() {
