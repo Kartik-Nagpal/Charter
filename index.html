@@ -48,8 +48,8 @@
               <li><a href="https://kartik-nagpal.github.io/#ANN">Javascript ANN</a></li>
             </ul>
 
-            <div class="alert alert-dismissible alert-danger navbar-right" style="margin-bottom: 0px;">
-              <strong>Beware!</strong> These links lead away from this site, and you data will be deleted.</h3>
+            <div class="alert alert-dismissible alert-danger navbar-right" style="margin-bottom: 0px; margin-left: 0px;">
+              <strong>Beware!</strong> These links lead away from this site, and your data will be deleted.</h3>
             </div>
           </div>
 
@@ -123,7 +123,7 @@
                     <div class="col-md-5">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" onclick="$('.LegendData').toggle(!this.checked)"> Don't Include Legend
+                          <input type="checkbox" id="LegCheck" onclick="$('.LegendData').toggle(!this.checked)"> Don't Include Legend
                         </label>
                       </div>
                     </div>
@@ -184,8 +184,8 @@
                               </div>
                               <div class="radio">
                                 <label>
-                                  <input type="radio" name="optionsRadios" id="Rows" onclick="parse(2)" value="option2">
-                                  Rows
+                                  <input type="radio" name="optionsRadios" id="Rows" onclick="parse(2)" value="option2" disabled>
+                                  Rows (Coming Soon...)
                                 </label>
                             </div>
                           </div>
@@ -193,7 +193,17 @@
                       </div>
                     </div>
 
-                    <br><br>
+                    <div class="brs" style="display: none">
+                      <br>
+                    </div>
+                    <div class="row" id="loadingBar" style="display: none">
+                      <div class="col-lg-8 col-lg-offset-2">
+                        <h5>Getting Things Ready...</h5>
+                        <div class="progress progress-striped active">
+                          <div class="progress-bar" style="width: 0%" id="loading"></div>
+                        </div>
+                      </div>
+                    </div>
                     <div class="row">
                       <div class="well col-md-10 col-md-offset-1" id="options" ng-show="show.isON">
                         {{c.product}}

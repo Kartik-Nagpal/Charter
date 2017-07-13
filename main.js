@@ -2,12 +2,10 @@
 function onload()
 {
   var app = angular.module("Charter", []);
-  console.log("Running");
+  console.log("Angular Prepped");
 
 
   app.controller("controller", ["$scope", function($scope) {
-
-    $scope.f = "pls work";
 
     $scope.show = {
       name: "Show Boolean: ",
@@ -15,47 +13,13 @@ function onload()
     };
 
     $scope.update = function(t) {
-      console.log("Works");
+      console.log("Updating");
       this.product = t;
 
       $scope.$apply(function () {
           $scope.show.isON = true;
       });
     }
-    //this.product = show;
-
-    /*$scope.parse = function(n) {
-      var d;
-      if(n === 1) {
-        Papa.parse($("#URLdata").val(), {
-        	download: true,
-        	complete: function(results) {
-        		d = results;
-        	}
-        });
-
-        setTimeout(function () {
-            var x = d.data[0];
-            console.log(x);
-            var t = document.createElement("table");
-            var row = t.appendChild(document.createElement('tr'));
-            for (var i = 0; i < x.length; i++) {
-                var cell = row.appendChild(document.createElement('td'));
-                cell.id = x[i];
-                cell.click(function() {
-                  console.log(this.id);
-                })
-            }
-
-            $("#options").append(t);
-            $scope.show.isON = true;
-            console.log("What??");
-        }, 2000);
-      }
-      else {
-        console.log("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-      }
-    };*/
   }]);
 }
 
@@ -99,7 +63,7 @@ function create() {
 
       var layout = {
         title: $("#ChartTitle").val(),
-        showlegend: true,
+        showlegend: false,
         geo: {
             projection: {
                 type: 'robinson'
@@ -114,8 +78,28 @@ function create() {
   });
 }
 
+var y;
+function loadBar() {
+  $("#loadingBar").show()
+  var x = $("#loading");
+  var i = 0;
+  y = setInterval(function() {
+    x.css("width", i+"%");
+    i++;
+    if(i >= 140)
+    {
+      clearInterval(y);
+      y = 0;
+      $("#loadingBar").hide();
+      $(".brs").show()
+    }
+  }, 50);
+}
+
 
 function parse(n) {
+  loadBar();
+
   var d;
   if(n === 1) {
     Papa.parse($("#URLdata").val(), {
@@ -168,11 +152,10 @@ function parse(n) {
 
         angular.element($('#cont')).scope().update(t);
         angular.element($('#cont')).scope().$apply();
-        console.log("Done");
-    }, 500);
+    }, 7000);
   }
   else {
-    console.log("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+    console.log("NOOOOOOOOOOOOOO");
   }
 }
 
@@ -185,6 +168,5 @@ function cancel() {
 }
 
 function reset() {
-  console.log("CLEARED");
   window.location.reload();
 }
