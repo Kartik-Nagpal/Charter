@@ -1,4 +1,3 @@
-
 function onload()
 {
   var app = angular.module("Charter", []);
@@ -71,12 +70,14 @@ function create() {
         }
       };
 
-      $("#Selection").remove();
+      $("#Selection").hide();
       $("nav").hide();
+      $("#chartContainer").show();
 
       Plotly.plot(chart, data, layout, {displayModeBar: false}, {showLink: false});
   });
 }
+
 
 var y;
 function loadBar() {
@@ -94,6 +95,13 @@ function loadBar() {
       $(".brs").show()
     }
   }, 50);
+}
+
+
+function back() {
+   $("#chartContainer").hide();
+   $("nav").show();
+   $("#Selection").show();
 }
 
 
@@ -155,7 +163,7 @@ function parse(n) {
     }, 7000);
   }
   else {
-    console.log("NOOOOOOOOOOOOOO");
+    console.log("NOOOOOOOOOOOOOO.com!");
   }
 }
 
