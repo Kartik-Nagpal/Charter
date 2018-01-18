@@ -6,7 +6,7 @@
 
       <!-- CSS Resources -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous"></link>
-      <link rel="stylesheet" href="https://bootswatch.com/united/bootstrap.min.css" crossorigin="anonymous"></link>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/united/bootstrap.min.css" crossorigin="anonymous"></link>
       <!-- End CSS Resources -->
 
 
@@ -14,14 +14,14 @@
       <script src="./PapaParse.js"></script>
       <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-      <script src="https://bootswatch.com/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
       <script src="./main.js"></script>
       <!-- End Javascript Resources -->
   </head>
 
 
-  <script>onload();</script>
+  <script>onload()</script>
 
 
   <body ng-app="Charter"> <!-- style="overflow: hidden" -->
@@ -102,6 +102,7 @@
                     <label for="select" class="col-lg-2 control-label">Chart Type</label>
                     <div class="col-lg-5">
                       <select class="form-control" id="select">
+                        <option>Cloropleth Map</option>
                         <option>Line Plot</option>
                         <option>Bubble Chart</option>
                         <option>Scatter Plot</option>
@@ -112,7 +113,7 @@
                         <option>2D Histogram</option>
                         <option>Histograms</option>
                         <option>Bubble Map</option>
-                        <option>Cloropleth Map</option>
+                        <!--<option>Cloropleth Map</option>-->
                         <option>Scatter Map</option>
                         <option>3D Surface Plots</option>
                         <option>3D Line Plots</option>
@@ -217,8 +218,6 @@
 
 
 
-
-
                   <div class="form-group">
                     <div class="col-lg-3 col-lg-offset-9 pull right">
                       <button type="button" class="btn btn-default" onclick="popup()">Cancel</button>
@@ -230,27 +229,6 @@
             </div>
 
 
-
-
-
-            <div class="modal">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="cancel()">&times;</button>
-                    <h4 class="modal-title">User Confirmation</h4>
-                  </div>
-                  <div class="modal-body">
-                    <p>ARE YOU SURE YOU WOULD LIKE TO CLEAR ALL FIELDS?</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" onclick="reset()" id="Yes">Yes, Delete</button>
-                    <button type="button" class="btn btn-success" onclick="cancel()" id="No" autofocus>No, Save</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
           <div class="col-md-1"></div>
         </div>
@@ -258,25 +236,39 @@
       </div>
 
 
-      <!--<div class="loading container-fluid" style="display: none; min-height: 100%; min-height: 100vh; ">
-        <div class="row">
-          <div class="col-lg-8 col-lg-offset-2" style="display: table-cell; vertical-align: middle; align-items: center;">
-            <h1>Getting Things Ready...</h1>
-            <div class="progress progress-striped active">
-              <div class="progress-bar" style="width: 0%"></div>
+
+
+      <div class="modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="cancel()">&times;</button>
+              <h4 class="modal-title">User Confirmation</h4>
+            </div>
+            <div class="modal-body">
+              <p>ARE YOU SURE YOU WOULD LIKE TO CLEAR ALL FIELDS?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" onclick="reset(); location.reload();" id="Yes">Yes, Delete</button>
+              <button type="button" class="btn btn-success" onclick="cancel()" id="No" autofocus>No, Save</button>
             </div>
           </div>
         </div>
-      </div>-->
+      </div>
 
 
-      <div class="well" style="min-height: calc(100vh - 80px); overflow: hidden;">
+
+
+
+      <div class="well" style="min-height: calc(100vh - 80px); overflow: hidden;" id="chartContainer">
         <div class="row">
-          <!-- Plotly chart will be drawn inside this the #chart, becuase you pass that variable to it, right near the end -->
+          <!-- Plotly chart should be drawn inside this #chart div, because you pass that variable to the function -->
           <div id="chart" style="min-height: calc(100vh - 80px);"></div>
         </div>
         <div class="row">
-          <a href="#" class="btn btn-primary pull-right" onclick="export()">Export as PNG</a>
+           <a href="#" class="btn btn-primary pull-left" onclick="back()">Back</a>
+           <a href="#" class="btn btn-danger pull-left" onclick="popup()">Reset</a>
+           <a href="#" class="btn btn-primary pull-right" onclick="export()">Export as PNG</a>
         </div>
       </div>
 
